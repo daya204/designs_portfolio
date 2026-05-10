@@ -1,7 +1,6 @@
 import { Navigation } from '@/components/Layout/Navigation'
 import { PageContainer } from '@/components/Layout/PageContainer'
 import ContactInfo from '@/components/Contact/ContactInfo'
-import MapSection from '@/components/Contact/MapSection'
 import Footer from '@/components/Layout/Footer'
 import { FadeInOnScroll } from '@/components/Common/FadeInOnScroll'
 import { Metadata } from 'next'
@@ -30,8 +29,6 @@ export default async function ContactPage() {
           {/* Contact Info */}
           <ContactInfo />
 
-          {/* Map */}
-          <MapSection />
         </PageContainer>
       </main>
 

@@ -1,4 +1,4 @@
-import { Mail, MapPin, Phone } from 'lucide-react'
+import { Mail, MapPin, Phone, ArrowRight } from 'lucide-react'
 import { FadeInOnScroll } from '@/components/Common/FadeInOnScroll'
 
 export default function ContactInfo() {
@@ -37,23 +37,28 @@ export default function ContactInfo() {
         </div>
       </FadeInOnScroll>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-3 gap-6">
         {contactDetails.map((detail, index) => {
           const Icon = detail.icon
           return (
             <FadeInOnScroll key={detail.label} delay={index * 100}>
               <a
                 href={detail.href}
-                className="group space-y-3 p-6 border border-border rounded-sm hover:border-foreground transition-colors"
+                className="group relative rounded-[2rem] border border-border bg-foreground/5 p-8 transition-all duration-300 hover:border-accent hover:bg-muted/70 hover:shadow-lg hover:-translate-y-2 backdrop-blur-sm"
               >
-                <Icon className="w-6 h-6 text-accent group-hover:text-foreground transition-colors" />
-                <div>
-                  <p className="text-sm font-light tracking-widest text-foreground/60 mb-1">
-                    {detail.label}
-                  </p>
-                  <p className="text-base font-light text-foreground group-hover:text-accent transition-colors">
-                    {detail.value}
-                  </p>
+                <div className="space-y-6">
+                  <div className="w-14 h-14 rounded-full border border-accent/30 bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300">
+                    <Icon className="w-7 h-7 text-accent" />
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm uppercase tracking-[0.3em] text-accent/80">
+                      {detail.label}
+                    </p>
+                    <p className="text-lg font-light text-foreground group-hover:text-accent transition-colors duration-300">
+                      {detail.value}
+                    </p>
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-foreground/40 group-hover:text-accent group-hover:translate-x-1 transition-all duration-300" />
                 </div>
               </a>
             </FadeInOnScroll>

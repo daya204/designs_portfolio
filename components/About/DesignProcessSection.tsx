@@ -18,25 +18,34 @@ export default function DesignProcessSection() {
     <section className="py-24 border-b border-border">
       <PageContainer>
         <FadeInOnScroll>
-          <div className="space-y-3 mb-16">
+          <div className="space-y-5 mb-12 max-w-3xl">
+            <p className="text-sm uppercase tracking-[0.4em] text-accent/80">
+              Expertise
+            </p>
             <h2 className="text-4xl md:text-5xl font-light tracking-tight text-foreground">
-              Our Expertise
+              What We Do Best
             </h2>
-            <div className="w-16 h-px bg-accent" />
+            <p className="text-lg text-foreground/70 font-light leading-relaxed">
+              From idea to finished collection, we provide a full range of fashion design services that support every step of the creative and production process.
+            </p>
           </div>
         </FadeInOnScroll>
 
-        <FadeInOnScroll delay={100}>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {expertise.map((item, index) => (
-              <div key={item} className="space-y-2">
-                <div className="text-sm font-light text-foreground/60 border border-border px-4 py-3 rounded-sm hover:bg-muted/50 transition-colors">
-                  {item}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {expertise.map((item, index) => (
+            <FadeInOnScroll key={item} delay={index * 60}>
+              <div className="group rounded-[2rem] border border-border bg-muted/40 p-6 transition duration-300 hover:-translate-y-1 hover:border-accent hover:bg-muted/70">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-sm font-medium text-accent">0{index + 1}</span>
+                  <div className="h-10 w-10 rounded-3xl border border-border bg-foreground/5 transition group-hover:bg-accent/10" />
                 </div>
+                <p className="mt-6 text-base text-foreground/80 font-light leading-relaxed">
+                  {item}
+                </p>
               </div>
-            ))}
-          </div>
-        </FadeInOnScroll>
+            </FadeInOnScroll>
+          ))}
+        </div>
       </PageContainer>
     </section>
   )

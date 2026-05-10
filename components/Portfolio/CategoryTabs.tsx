@@ -9,18 +9,21 @@ interface CategoryTabsProps {
 
 export function CategoryTabs({ activeCategory, onCategoryChange }: CategoryTabsProps) {
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap gap-3 justify-center md:justify-start">
       {CATEGORIES.map((category) => (
         <button
           key={category}
           onClick={() => onCategoryChange(category)}
-          className={`text-sm font-light tracking-wide transition-all px-4 py-2 rounded-sm ${
+          className={`relative px-6 py-3 text-sm font-light tracking-wide transition-all duration-300 rounded-full ${
             activeCategory === category
-              ? 'bg-foreground text-background'
-              : 'border border-border text-foreground/70 hover:text-foreground hover:border-foreground'
+              ? 'bg-accent text-background shadow-lg shadow-accent/30'
+              : 'border border-foreground/20 text-foreground/70 hover:text-foreground hover:border-accent hover:bg-accent/5 backdrop-blur-sm'
           }`}
         >
           {category}
+          {activeCategory === category && (
+            <span className="absolute inset-0 rounded-full border border-accent/30 animate-pulse" />
+          )}
         </button>
       ))}
     </div>
