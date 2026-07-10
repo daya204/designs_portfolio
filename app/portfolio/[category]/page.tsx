@@ -4,6 +4,9 @@ import CategoryGallery from '@/components/Portfolio/CategoryGallery'
 import { PageContainer } from '@/components/Layout/PageContainer'
 import { notFound } from 'next/navigation'
 
+// Always render on demand — never pre-render at build time
+export const dynamic = 'force-dynamic'
+
 interface CategoryPageProps {
   params: Promise<{ category: string }>
 }
@@ -15,7 +18,6 @@ export async function generateMetadata({ params }: CategoryPageProps) {
   if (!categoryData) {
     return {
       title: 'Not Found',
-      description: 'The portfolio category you are looking for does not exist.',
     }
   }
 

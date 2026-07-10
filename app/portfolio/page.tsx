@@ -4,6 +4,8 @@ import { PageContainer } from '@/components/Layout/PageContainer'
 import { FadeInOnScroll } from '@/components/Common/FadeInOnScroll'
 import { getCategories } from '@/lib/portfolio'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Portfolio - Sahana Design Studio',
   description: 'Explore our portfolio categories and design work',
