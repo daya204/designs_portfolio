@@ -5,31 +5,78 @@ import Image from 'next/image'
 import { CategoryWithImages, PortfolioImage } from '@/lib/types'
 import LightboxModal from './LightboxModal'
 import ImageUploadModal from './ImageUploadModal'
+import UploadSecretPrompt from './UploadSecretPrompt'
 import { Button } from '@/components/ui/button'
+import { useUploadAuth } from '@/hooks/use-upload-auth'
+import { getStoredSecret } from '@/lib/upload-auth'
+import { Trash2 } from 'lucide-react'
 
 interface CategoryGalleryProps {
   category: CategoryWithImages
   onImageAdded?: () => void
 }
 
-export default function CategoryGallery({
-  category,
-  onImageAdded,
-}: CategoryGalleryProps) {
+export default function CategoryGallery({ category, onImageAdded }: CategoryGalleryProps) {
   const [selectedImage, setSelectedImage] = useState<PortfolioImage | null>(null)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [showUploadModal, setShowUploadModal] = useState(false)
+  const [showSecretPrompt, setShowSecretPrompt] = useState(false)
   const [images, setImages] = useState(category.images)
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+
+  const { isAuthorized, isChecking, login } = useUploadAuth()
+
+  const handleAddImageClick = () => {
+    if (isAuthorized) {
+      setShowUploadModal(true)
+    } else {
+      setShowSecretPrompt(true)
+    }
+  }
+
+  const handleLogin = async (secret: string) => {
+    const ok = await login(secret)
+    if (ok) {
+      setShowSecretPrompt(false)
+      setShowUploadModal(true)
+    }
+    return ok
+  }
+
+  const handleImageAdded = (newImage: PortfolioImage) => {
+    setImages((prev) => [newImage, ...prev])
+    onImageAdded?.()
+  }
+
+  const handleDelete = async (image: PortfolioImage, e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!confirm(`Delete this image?`)) return
+
+    const secret = getStoredSecret()
+    if (!secret) return
+
+    setDeletingId(image.id)
+    try {
+      const res = await fetch('/api/portfolio/delete', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-upload-secret': secret,
+        },
+        body: JSON.stringify({ imageId: image.id, imageUrl: image.image_url }),
+      })
+      if (res.ok) {
+        setImages((prev) => prev.filter((img) => img.id !== image.id))
+        if (selectedImage?.id === image.id) setSelectedImage(null)
+      }
+    } finally {
+      setDeletingId(null)
+    }
+  }
 
   const handleImageClick = (image: PortfolioImage, index: number) => {
     setSelectedImage(image)
     setSelectedIndex(index)
-  }
-
-  const handleImageAdded = (newImage: PortfolioImage) => {
-    setImages([newImage, ...images])
-    setShowUploadModal(false)
-    onImageAdded?.()
   }
 
   const handlePrevImage = () => {
@@ -50,7 +97,7 @@ export default function CategoryGallery({
 
   return (
     <div className="w-full">
-      {/* Header with title and upload button */}
+      {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-12">
         <div>
           <h1 className="text-4xl md:text-5xl font-light tracking-wider text-balance">
@@ -60,13 +107,16 @@ export default function CategoryGallery({
             <p className="text-foreground/60 mt-3 text-lg">{category.description}</p>
           )}
         </div>
-        <Button
-          onClick={() => setShowUploadModal(true)}
-          className="whitespace-nowrap"
-          variant="outline"
-        >
-          + Add Image
-        </Button>
+        {/* Add Image button — only shown once auth is resolved */}
+        {!isChecking && (
+          <Button
+            onClick={handleAddImageClick}
+            className="whitespace-nowrap"
+            variant="outline"
+          >
+            + Add Images
+          </Button>
+        )}
       </div>
 
       {/* Gallery Grid */}
@@ -86,10 +136,19 @@ export default function CategoryGallery({
               />
               {/* Hover overlay */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <p className="text-sm font-light tracking-widest">VIEW</p>
-                </div>
+                <p className="text-sm font-light tracking-widest text-white">VIEW</p>
               </div>
+              {/* Delete button (only for authorized users) */}
+              {isAuthorized && (
+                <button
+                  onClick={(e) => handleDelete(image, e)}
+                  disabled={deletingId === image.id}
+                  className="absolute top-2 right-2 z-10 bg-black/60 hover:bg-red-600 text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 disabled:opacity-50"
+                  title="Delete image"
+                >
+                  <Trash2 size={14} />
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -97,9 +156,17 @@ export default function CategoryGallery({
         <div className="min-h-96 flex items-center justify-center bg-muted/50 rounded-lg">
           <div className="text-center">
             <p className="text-foreground/50 mb-4">No images yet</p>
-            <Button onClick={() => setShowUploadModal(true)}>Add First Image</Button>
+            <Button onClick={handleAddImageClick}>Add First Image</Button>
           </div>
         </div>
+      )}
+
+      {/* Secret prompt */}
+      {showSecretPrompt && (
+        <UploadSecretPrompt
+          onLogin={handleLogin}
+          onCancel={() => setShowSecretPrompt(false)}
+        />
       )}
 
       {/* Upload Modal */}
@@ -112,7 +179,7 @@ export default function CategoryGallery({
         />
       )}
 
-      {/* Lightbox Modal */}
+      {/* Lightbox */}
       {selectedImage && (
         <LightboxModal
           image={selectedImage}
