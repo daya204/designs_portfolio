@@ -1,4 +1,4 @@
-export type PortfolioCategory = 'Kids Wear' | 'Infant Wear' | 'Men Wear' | 'Women Wear' | 'Home Textile' | 'Logo & Branding' | 'Flat Sketches' | 'Patterns'
+export type PortfolioCategory = 'Kids Wear' | 'Infant Wear' | 'Boys/Girls Wear' | 'Men Wear' | 'Women Wear' | 'Home Textile' | 'Logo & Branding' | 'Flat Sketches' | 'Patterns'
 
 export interface PortfolioItem {
   id: string
@@ -54,6 +54,29 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
     category: 'Infant Wear',
     image: 'https://images.unsplash.com/photo-1487537763898-cc1a59ee0739?w=500&h=500&fit=crop',
     description: 'Versatile pieces for all seasons',
+  },
+
+  // Boys/Girls Wear
+  {
+    id: 'boysgirls-1',
+    title: 'Boys Collection',
+    category: 'Boys/Girls Wear',
+    image: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500&h=500&fit=crop',
+    description: 'Trendy boys fashion collection',
+  },
+  {
+    id: 'boysgirls-2',
+    title: 'Girls Collection',
+    category: 'Boys/Girls Wear',
+    image: 'https://images.unsplash.com/photo-1476234251651-f353703a034d?w=500&h=500&fit=crop',
+    description: 'Playful and stylish girls wear',
+  },
+  {
+    id: 'boysgirls-3',
+    title: 'Casual Everyday Wear',
+    category: 'Boys/Girls Wear',
+    image: 'https://images.unsplash.com/photo-1503454537688-e6694a914d47?w=500&h=500&fit=crop',
+    description: 'Comfortable everyday outfits',
   },
 
   // Men Wear
@@ -198,6 +221,7 @@ export const PORTFOLIO_ITEMS: PortfolioItem[] = [
 export const CATEGORIES: PortfolioCategory[] = [
   'Kids Wear',
   'Infant Wear',
+  'Boys/Girls Wear',
   'Men Wear',
   'Women Wear',
   'Home Textile',
