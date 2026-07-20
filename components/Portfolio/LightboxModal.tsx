@@ -18,6 +18,7 @@ interface LightboxModalProps {
 
 export default function LightboxModal({
   image,
+  images,
   currentIndex,
   onClose,
   onPrev,
