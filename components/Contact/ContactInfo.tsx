@@ -6,19 +6,19 @@ export default function ContactInfo() {
     {
       icon: Mail,
       label: 'Email',
-      value: 'hello@sahanadesigns.com',
-      href: 'mailto:hello@sahanadesigns.com',
+      value: 'f.designer.deepa@gmail.com',
+      href: 'mailto:f.designer.deepa@gmail.com',
     },
     {
       icon: Phone,
       label: 'Phone',
-      value: '+91 (555) 123-4567',
-      href: 'tel:+915551234567',
+      value: '+91 99944 87778',
+      href: 'tel:+919994487778',
     },
     {
       icon: MapPin,
       label: 'Location',
-      value: 'New Delhi, India',
+      value: 'Tiruppur, Tamil Nadu',
       href: '#',
     },
   ]
